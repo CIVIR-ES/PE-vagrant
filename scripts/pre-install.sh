@@ -4,15 +4,9 @@ set -e
 set -x
 
 sudo yum -y update
-<<<<<<< HEAD
 cd /tmp/master1
 sudo mkdir -p /opt/puppetlabs/server/apps
 sudo mv /tmp/master1/hosts /etc/
-=======
-cd /tmp/files
-sudo mkdir -p /opt/puppetlabs/server/apps
-sudo mv /tmp/files/hosts /etc/
->>>>>>> 8281b5eb06fd041408236ed0b4a748d3e5154979
 #dependencies puppet master START
 sudo yum -y install pciutils
 sudo yum -y install system-logos

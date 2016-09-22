@@ -39,7 +39,7 @@ database "PostgreSQL" {
 }
 cloud "Automalia" {
 }
-node "Node" {
+cloud "Node" {
   [Puppet\nAgent]
   interface SSH
 }

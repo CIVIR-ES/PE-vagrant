@@ -1,40 +1,52 @@
 @startuml
 title OLA 3\n Components Diagram
+Actor User
+
 node "PuppetEnterprise" {
-  [r10k]
+  [Code Manager\nr10k] as r10k
   [Master]
   [PuppetDB]
   [Console]
+  interface "TCP:8170" as TCP8170
+  interface "TCP:443" as TCP443
+  interface "TCP:8080" as TCP8080
+  [Console] - TCP443
+  r10k - TCP8170
+  [PuppetDB] - TCP8080
 }
 
-node "MARS\nApache" as MRS {
+node "MARS\nApache" as MARS {
   [Puppet Forge]
   [Repositorios RHEL7]
   [Artifacts]
 }
 
 node "GitLab" {
-  [Web Server]
+  [git]
+  interface "GIT:te-controlrepo" as controlrepo
+  [git] - controlrepo
 }
 cloud "Internet" {
 }
 database "PostgreSQL" {
   [postgresql]
+  interface "TCP:5432" as TCP5432
+  [postgresql] - TCP5432
 }
 cloud "Automalia" {
 }
-cloud "vCloudDirector"{
-  [VM Nodes]
+node "Node" {
+  [Puppet\nAgent]
 }
-Automalia -> [VM Nodes] : 22, 3105, 1002, 443, 80
-Automalia -> vCloudDirector
-[r10k] -> [Web Server] : https
-[r10k] -> [Puppet Forge] : https
-[VM Nodes] -> MRS : 22, 80, 443
-[VM Nodes] -> [Master] : 8140, 8142, 61613
-MRS -> Internet : proxy 80, 443
-[PuppetDB] -> PostgreSQL : 5432
-[Console] -> PostgreSQL : 5432
-[Web Server] -> [Console] : WebHook
-
+Automalia -> Node : 22, 3105, 1002, 443, 80
+Automalia -> TCP8080
+User -> TCP443
+r10k -> controlrepo
+r10k -> [Puppet Forge] : https
+[Puppet\nAgent] -> MARS : 22, 80, 443
+[Puppet\nAgent] -> [Master] : 8140, 8142, 61613
+MARS -> Internet : proxy 80, 443
+[PuppetDB] -> TCP5432
+[Console] -> TCP5432
+[git] -> TCP8170 : webhook
 @enduml

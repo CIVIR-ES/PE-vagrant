@@ -11,7 +11,9 @@ node "PuppetEnterprise" {
   interface "TCP:443" as TCP443
   interface "TCP:8080" as TCP8080
   interface "TCP:8140" as TCP8140
+  interface "TCP:4433" as TCP4433
   [Console] - TCP443
+  [Console] - TCP4433
   r10k - TCP8170
   [PuppetDB] - TCP8080
   [Master] - TCP8140

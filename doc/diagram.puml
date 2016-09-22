@@ -10,9 +10,11 @@ node "PuppetEnterprise" {
   interface "TCP:8170" as TCP8170
   interface "TCP:443" as TCP443
   interface "TCP:8080" as TCP8080
+  interface "TCP:8140" as TCP8140
   [Console] - TCP443
   r10k - TCP8170
   [PuppetDB] - TCP8080
+  [Master] - TCP8140
 }
 
 node "MARS\nApache" as MARS {
@@ -37,14 +39,15 @@ cloud "Automalia" {
 }
 node "Node" {
   [Puppet\nAgent]
+  interface SSH
 }
-Automalia -> Node : 22, 3105, 1002, 443, 80
+Automalia -> SSH
 Automalia -> TCP8080
 User -> TCP443
 r10k -> controlrepo
-r10k -> [Puppet Forge] : https
+r10k -> [Puppet Forge]
 [Puppet\nAgent] -> MARS : 22, 80, 443
-[Puppet\nAgent] -> [Master] : 8140, 8142, 61613
+[Puppet\nAgent] -> TCP8140
 MARS -> Internet : proxy 80, 443
 [PuppetDB] -> TCP5432
 [Console] -> TCP5432

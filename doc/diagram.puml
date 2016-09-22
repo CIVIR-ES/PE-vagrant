@@ -28,7 +28,7 @@ node MARS {
 
 node "GitLab" {
   [git]
-  interface "GIT:te-controlrepo" as controlrepo
+  interface "GIT:controlrepo" as controlrepo
   [git] - controlrepo
 }
 cloud "Internet" {

@@ -9,7 +9,7 @@ node "PuppetEnterprise" {
   [Console]
   interface "TCP:8170" as TCP8170
   interface "TCP:443" as TCP443
-  interface "TCP:8080" as TCP8080
+  interface "TCP:8080\nTCP:8081" as TCP8081
   interface "TCP:8140" as TCP8140
   interface "TCP:4433" as TCP4433
   [Console] - TCP443
@@ -48,7 +48,7 @@ cloud "Node" {
   interface SSH
 }
 Automalia -> SSH
-Automalia -> TCP8080
+Automalia -> TCP8081
 Automalia -> TCP4433
 User -> TCP443
 r10k -> controlrepo

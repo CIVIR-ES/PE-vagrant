@@ -15,7 +15,7 @@ node "PuppetEnterprise" {
   [Console] - TCP443
   [Console] - TCP4433
   r10k - TCP8170
-  [PuppetDB] - TCP8080
+  [PuppetDB] - TCP8081
   [Master] - TCP8140
 }
 

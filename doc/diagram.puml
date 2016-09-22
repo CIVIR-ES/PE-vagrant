@@ -19,10 +19,13 @@ node "PuppetEnterprise" {
   [Master] - TCP8140
 }
 
-node "MARS\nApache" as MARS {
+node MARS {
+  [Apache]
   [Puppet Forge]
   [Repositorios RHEL7]
   [Artifacts]
+  interface "TCP:80\nTCP:443" as TCPMARS
+  [Apache] - TCPMARS
 }
 
 node "GitLab" {
@@ -31,6 +34,7 @@ node "GitLab" {
   [git] - controlrepo
 }
 cloud "Internet" {
+  [forge.puppet.com]
 }
 database "PostgreSQL" {
   [postgresql]
@@ -45,13 +49,14 @@ cloud "Node" {
 }
 Automalia -> SSH
 Automalia -> TCP8080
+Automalia -> TCP4433
 User -> TCP443
 r10k -> controlrepo
-r10k -> [Puppet Forge]
-[Puppet\nAgent] -> MARS : 22, 80, 443
+r10k -> TCPMARS
+[Puppet Forge] -> [forge.puppet.com]
+[Puppet\nAgent] -> TCPMARS
 [Puppet\nAgent] -> TCP8140
-MARS -> Internet : proxy 80, 443
 [PuppetDB] -> TCP5432
 [Console] -> TCP5432
-[git] -> TCP8170 : webhook
+[git] -> TCP8170
 @enduml

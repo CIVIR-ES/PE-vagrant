@@ -11,9 +11,7 @@ node "PuppetEnterprise" {
   interface "TCP:443" as TCP443
   interface "TCP:8080\nTCP:8081" as TCP8081
   interface "TCP:8140" as TCP8140
-  interface "TCP:4433" as TCP4433
   [Console] - TCP443
-  [Console] - TCP4433
   r10k - TCP8170
   [PuppetDB] - TCP8081
   [Master] - TCP8140
@@ -47,15 +45,23 @@ cloud "Node" {
   [Puppet\nAgent]
   interface SSH
 }
+
+cloud "External CA" {
+  [Intermediate CA]
+  interface "API CA" as APICA
+  [Intermediate CA] - APICA
+}
+  
 Automalia -> SSH
 Automalia -> TCP8081
-Automalia -> TCP4433
+Automalia -> controlrepo
 User -> TCP443
 r10k -> controlrepo
 r10k -> TCPMARS
 [Puppet Forge] -> [forge.puppet.com]
 [Puppet\nAgent] -> TCPMARS
 [Puppet\nAgent] -> TCP8140
+Node -> APICA
 [PuppetDB] -> TCP5432
 [Console] -> TCP5432
 [git] -> TCP8170

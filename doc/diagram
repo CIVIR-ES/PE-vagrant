@@ -1,71 +1,40 @@
 @startuml
 title OLA 3\n Components Diagram
-
 node "PuppetEnterprise" {
   [r10k]
-  [pe-puppetserver]
-  [pe-puppetdb]
-  [pe-console-services]
-  [pe-nginx]
-  [pe-activemq]
-  [mcollective]
-  [puppet]
-  [pe-orchestration-services]
-  [pxp-agent]
+  [Master]
+  [PuppetDB]
+  [Console]
 }
- 
-node "MARS" {
-  [Web Server]
-  [RH 7.2 repo mirror]
-  [gemirro]
-  [ISOs]
-  [Puppet Forge mirror]
-} 
+
+node "MARS\nApache" as MRS {
+  [Puppet Forge]
+  [Repositorios RHEL7]
+  [Artifacts]
+}
 
 node "GitLab" {
-  [WebServer]
+  [Web Server]
 }
-
 cloud "Internet" {
-
 }
-
-
 database "PostgreSQL" {
-  [DB pe-puppetdb]
-  folder "Console" {
-    [DB pe-classifier]
-    [DB pe-rbac]
-    [DB pe-activity]
-  }
-  [DB pe-orchestrator]
+  [postgresql]
 }
-
 cloud "Automalia" {
-}
-cloud {
-  [IPAM]
 }
 cloud "vCloudDirector"{
   [VM Nodes]
 }
-
-Automalia -> [IPAM] : 443
-Automalia -> [pe-puppetserver] : 443, 8081, 4433
-Automalia -> [Web Server] : 22, 80, 443
-Automalia -> [WebServer] : 22, 80, 443
 Automalia -> [VM Nodes] : 22, 3105, 1002, 443, 80
 Automalia -> vCloudDirector
-[pe-puppetserver] -> [WebServer] : 443, 80, 20, 22
 [r10k] -> [Web Server] : https
-[VM Nodes] -> [Web Server] : 22, 80, 443
-[VM Nodes] -> [pe-puppetserver] : 8140, 8142, 61613
-MARS -> Internet : proxy 80, 443
-
-[pe-puppetdb] -> [DB pe-puppetdb] : 5432
-[pe-console-services] -> [DB pe-classifier] : 5432
-[pe-console-services] -> [DB pe-rbac] : 5432
-[pe-console-services] -> [DB pe-activity] : 5432
-
+[r10k] -> [Puppet Forge] : https
+[VM Nodes] -> MRS : 22, 80, 443
+[VM Nodes] -> [Master] : 8140, 8142, 61613
+MRS -> Internet : proxy 80, 443
+[PuppetDB] -> PostgreSQL : 5432
+[Console] -> PostgreSQL : 5432
+[Web Server] -> [Console] : WebHook
 
 @enduml

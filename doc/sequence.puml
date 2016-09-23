@@ -3,7 +3,7 @@ title OLA3\n Sequence Diagram
 
 actor User
 participant "Automalia" as A
-participant "gitlab" as B
+participant "Gitlab" as B
 participant "PE" as C
 participant "MARS" as D
 participant "Node" as E
@@ -29,9 +29,9 @@ deactivate C
 
 A -> E: Bootstrap node
 activate E
-E -> C: Get and install agent
+E -> C: Request agent installer
 C --> E: ok
-E -> F: Sign and get node certificate
+E -> F: Request node certificate
 F --> E: ok
 E -> A: Node Bootstrapped
 deactivate E
@@ -42,7 +42,7 @@ E -> C: Request catalog
 C --> E: ok
 E -> E: Apply catalog
 activate E
-E -> D: Get software
+E -> D: Request software
 D --> E: ok
 deactivate E
 E -> C: Report node status
@@ -50,8 +50,8 @@ E -> A: Agent runs
 deactivate E
 
 C -> G: Store node status
-A -> G: Get node status
+A -> G: Request node status
 G --> A: ok
 
-A --> User: Node deployed
+A -> User: Node deployed
 @enduml

@@ -12,7 +12,7 @@ participant "CA" as F
 database "PuppetDB" as G
 
 
-User -> A: Bootstrap node
+User -> A: Deploy app
 activate A
 
 A -> B: Write hiera file
@@ -33,7 +33,7 @@ deactivate C
 B --> A
 deactivate B
 
-A -> E: Deploy node
+A -> E: Bootstrap node
 activate E
 
 E -> C: Get Puppet Agent
@@ -62,11 +62,17 @@ deactivate C
 
 E -> E: Apply catalog
 
-E -> G: Store metadata
+E -> C: Report node status
+activate C
+
+C -> G: Report node status
 activate G
 
-G --> E
+G --> C
 deactivate G
+
+C --> E
+deactivate C
 
 E --> A
 deactivate E

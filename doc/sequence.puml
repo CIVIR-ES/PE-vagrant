@@ -1,0 +1,87 @@
+@startuml
+
+title PaaS Dinamico\n Sequence Diagram
+
+actor User
+participant "Automalia" as A
+participant "gitlab" as B
+participant "PE" as C
+participant "MARS" as D
+participant "Node" as E
+participant "CA" as F
+database "PuppetDB" as G
+
+
+User -> A: Deploy app
+activate A
+
+A -> B: Write hiera file
+activate B
+
+B -> C: r10k code update
+activate C
+
+C --> B
+deactivate C
+
+B --> A
+deactivate B
+
+A -> E: Deploy node
+activate E
+
+E -> C: Get Puppet Agent
+activate C
+
+C --> E
+deactivate C
+
+E --> A
+deactivate E
+
+A -> E: Run Puppet Agent
+activate E
+
+E -> E: Apply catalog
+
+E -> G: Store metadata
+activate G
+
+G --> E
+deactivate G
+
+E --> A
+deactivate E
+
+A -> B: Write hiera file
+activate B
+
+B --> A
+deactivate B
+
+A -> B: Run Puppet apply
+activate B
+
+B -> B: Apply catalog
+B -> D: Store metadata
+activate D
+D --> B
+deactivate D
+B -> B: Write custom report (CSV)
+B --> A
+deactivate B
+
+A -> B: Get custom report (CSV)
+activate B
+B --> A
+deactivate B
+
+A -> D: Extract PuppetDB info
+activate D
+D --> A
+deactivate D
+
+A --> User: App deployed
+deactivate A
+
+@enduml

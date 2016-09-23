@@ -55,7 +55,7 @@ cloud "External CA" {
 Automalia -> SSH
 Automalia -> TCP8081
 Automalia -> controlrepo
-User -> TCP443
+User -> Automalia
 r10k -> controlrepo
 r10k -> TCPMARS
 [Puppet Forge] -> [forge.puppet.com]

@@ -53,34 +53,6 @@ deactivate G
 E --> A
 deactivate E
 
-A -> B: Write hiera file
-activate B
-
-B --> A
-deactivate B
-
-A -> B: Run Puppet apply
-activate B
-
-B -> B: Apply catalog
-B -> D: Store metadata
-activate D
-D --> B
-deactivate D
-B -> B: Write custom report (CSV)
-B --> A
-deactivate B
-
-A -> B: Get custom report (CSV)
-activate B
-B --> A
-deactivate B
-
-A -> D: Extract PuppetDB info
-activate D
-D --> A
-deactivate D
-
 A --> User: App deployed
 deactivate A
 

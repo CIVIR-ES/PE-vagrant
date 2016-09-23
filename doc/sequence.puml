@@ -18,7 +18,7 @@ activate A
 A -> B: Write hiera file
 activate B
 
-B -> C: r10k code update
+B -> C: Update controlrepo
 activate C
 
 C -> D: Get modules
@@ -42,7 +42,7 @@ activate C
 C --> E
 deactivate C
 
-E -> F: Get signer certificates
+E -> F: Sign and get node certificate
 activate F
 
 F --> E
@@ -62,10 +62,16 @@ deactivate C
 
 E -> E: Apply catalog
 
+E -> D: Get software
+activate D
+
+D --> E
+deactivate D
+
 E -> C: Report node status
 activate C
 
-C -> G: Report node status
+C -> G: Store node status
 activate G
 
 G --> C
@@ -76,6 +82,12 @@ deactivate C
 
 E --> A
 deactivate E
+
+A -> G: Check node status
+activate G
+
+G --> A
+deactivate G
 
 A --> User: Node deployed
 deactivate A

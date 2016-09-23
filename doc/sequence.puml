@@ -1,6 +1,6 @@
 @startuml
 
-title PaaS Dinamico\n Sequence Diagram
+title OLA3\n Sequence Diagram
 
 actor User
 participant "Automalia" as A

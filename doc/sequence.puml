@@ -33,20 +33,21 @@ E -> C: Request agent installer
 C --> E: ok
 E -> F: Request node certificate
 F --> E: ok
-E -> A: Node Bootstrapped
 deactivate E
 
 A -> E: Run agent
 activate E
 E -> C: Request catalog
+activate C
+C -> C: Compile catalog
 C --> E: ok
+deactivate C
 E -> E: Apply catalog
 activate E
 E -> D: Request software
 D --> E: ok
 deactivate E
 E -> C: Report node status
-E -> A: Agent runs
 deactivate E
 
 C -> G: Store node status

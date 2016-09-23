@@ -53,5 +53,5 @@ C -> G: Store node status
 A -> G: Request node status
 G --> A: ok
 
-A -> User: Node deployed
+A -> User: App deployed
 @enduml

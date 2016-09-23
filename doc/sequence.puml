@@ -42,6 +42,18 @@ deactivate E
 A -> E: Run Puppet Agent
 activate E
 
+E -> C: Get catalog
+activate C
+
+C -> D: Get modules
+activate D
+
+D --> C
+deactivate D
+
+C --> E
+deactivate C
+
 E -> E: Apply catalog
 
 E -> G: Store metadata

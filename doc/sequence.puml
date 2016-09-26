@@ -16,7 +16,6 @@ A -> B: Pull controlrepo
 B --> A: ok
 A -> A: Write hiera file
 A -> B: Push controlrepo
-B --> A: ok
 deactivate A
 
 B -> C: Notify codemanager

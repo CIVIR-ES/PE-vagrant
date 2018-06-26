@@ -1,0 +1,5 @@
+#exclude installer
+puppet-enterprise-2016.2.0-el-7-x86_64.tar.gz
+*.tar.gz
+.vagrant/
+files/puppet-enterprise-2016.4.2-el-7-x86_64/

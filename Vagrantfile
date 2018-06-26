@@ -1,33 +1,30 @@
 Vagrant.configure(2) do |config|
-  config.vm.define "master1" do |master1|
-    master1.vm.box = "centos/7"
-    master1.vm.hostname = "master1"
-    master1.vm.network "public_network", use_dhcp_assigned_default_route: true, ip: "192.168.0.164", bridge: "wlo1"
-    master1.vm.network "forwarded_port", guest: 443, host: 22102
-    master1.vm.provider "virtualbox" do |v|
-      v.memory = 2048
+  config.vm.box_check_update = false
+  config.vm.define "master" do |master|
+    master.vm.box = "bento/centos-7.3"
+    master.vm.hostname = "master.vagrant.test"
+    master.vm.network :private_network, ip: "10.10.10.10"
+    master.vm.network :public_network
+    master.vm.provider "virtualbox" do |v|
+      v.memory = 3072
+      v.cpus = 4
     end
-    master1.vm.provision :file do |f|
-      f.source = "files/master1"
-      f.destination = "/tmp/"
-    end
-    master1.vm.provision "shell", path: "scripts/pre-install.sh"
-    master1.vm.provision "shell", path: "scripts/install.sh"
+    master.vm.provision "shell", inline: <<-SHELL
+      mkdir -p /opt/puppetlabs/server/apps
+      /vagrant/files/puppet-enterprise-2016.4.2-el-7-x86_64/puppet-enterprise-installer -c /vagrant/files/pe.conf
+      /opt/puppetlabs/puppet/bin/puppet agent -t
+    SHELL
   end
 
   config.vm.define "node1" do |node1|
-    node1.vm.box = "centos/7"
-    node1.vm.hostname = "node1"
-    node1.vm.network "public_network", use_dhcp_assigned_default_route: true, ip: "192.168.0.165",
-bridge: "wlo1"
-    node1.vm.provision :file do |f|
-      f.source = "files/node1/"
-      f.destination = "/tmp/"
-    end
+    node1.vm.box = "bento/centos-7.3"
+    node1.vm.hostname = "node1.vagrant.test"
+    node1.vm.network :private_network, ip: "10.10.10.15"
+    node1.vm.network :public_network
     node1.vm.provision "shell", inline: <<-SHELL
-      sudo mv /tmp/node1/hosts /etc/hosts
-      sudo curl -k https://master1:8140/packages/current/install.bash | sudo bash
-#     sudo /opt/puppetlabs/bin/puppet agent -t
+      echo "10.10.10.10    master.vagrant.test    master" >> /etc/hosts
+#     echo "192.168.0.28	master.vagrant.test    master" >> /etc/hosts
+      curl -k https://master:8140/packages/current/install.bash | sudo bash
     SHELL
   end
 end

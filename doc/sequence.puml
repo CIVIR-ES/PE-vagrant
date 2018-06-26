@@ -1,0 +1,57 @@
+@startuml
+title OLA3\n Sequence Diagram
+
+actor User
+participant "Automalia" as A
+participant "Gitlab" as B
+participant "PE" as C
+participant "MARS" as D
+participant "Node" as E
+participant "CA" as F
+database "PuppetDB" as G
+
+User -> A: Deploy app
+activate A
+A -> B: Pull controlrepo
+B --> A: ok
+A -> A: Write hiera file
+A -> B: Push controlrepo
+deactivate A
+
+B -> C: Notify codemanager
+activate C
+C -> B: Request controlrepo
+B --> C: ok
+C -> D: Request modules
+D --> C: ok
+deactivate C
+
+A -> E: Bootstrap node
+activate E
+E -> C: Request agent installer
+C --> E: ok
+E -> F: Request node certificate
+F --> E: ok
+deactivate E
+
+A -> E: Run agent
+activate E
+E -> C: Request catalog
+activate C
+C -> C: Compile catalog
+C --> E: ok
+deactivate C
+E -> E: Apply catalog
+activate E
+E -> D: Request software
+D --> E: ok
+deactivate E
+E -> C: Report node status
+deactivate E
+
+C -> G: Store node status
+A -> G: Request node status
+G --> A: ok
+
+A -> User: App deployed
+@enduml
